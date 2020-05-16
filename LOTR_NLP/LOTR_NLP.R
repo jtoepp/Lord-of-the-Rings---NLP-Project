@@ -5,7 +5,8 @@
 packages = c("jsonlite",
              "dplyr",
              "stringr",
-             "tidyverse")
+             "tidyverse",
+             "ggcharts")
 
 # use this function to check if each package is on the local machine
 # if a package is installed, it will be loaded
@@ -59,15 +60,24 @@ tidyBooks <- tidyBooks_stop %>%
 tidyBooks %>% 
   count(word, sort = TRUE)
 
-# column chart of the most used words
+# set save location for the graphs
+pathGraphs = "./Graphs"
+
+# column chart of the most used words using the ggchart package
 tidyBooks %>% 
   count(word, sort = TRUE) %>% 
-  filter(n > 400) %>% 
+  filter(n > 500) %>% 
   mutate(word = reorder(word, n)) %>% 
-  ggplot(aes(word, n)) +
-    geom_col() +
-    xlab("Frequency of Use") +
-    coord_flip()
+  bar_chart(word, n) +
+    labs(x = "Frequency of Use",
+         y = "Word",
+         title = "Most Used Words in The Lord of The Rings") +
+    theme_nightblue(grid = "XY",
+                    axis = "x",
+                    ticks = "x") +
+    ggsave("Most Used Words in The Lord of The Rings.png",
+         plot = last_plot(),
+         path = pathGraphs)
 
 
 
