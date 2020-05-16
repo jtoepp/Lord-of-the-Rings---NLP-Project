@@ -69,16 +69,15 @@ tidyBooks %>%
   filter(n > 500) %>% 
   mutate(word = reorder(word, n)) %>% 
   bar_chart(word, n) +
-    labs(x = "Frequency of Use",
-         y = "Word",
+    labs(x = "Word",
+         y = "Frequency of Use",
          title = "Most Used Words in The Lord of The Rings") +
     theme_nightblue(grid = "XY",
                     axis = "x",
                     ticks = "x") +
-    ggsave("Most Used Words in The Lord of The Rings.png",
+    ggsave("MostUsedWordsinTheLordofTheRings.png",
          plot = last_plot(),
          path = pathGraphs)
-
 
 
 
