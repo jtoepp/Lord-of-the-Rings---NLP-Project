@@ -57,7 +57,7 @@ tidyBooks <- tidyBooks_stop %>%
   anti_join(stop_words)
 
 # count the most used words
-tidyBooks %>% 
+mostUsed <- tidyBooks %>% 
   count(word, sort = TRUE)
 
 # set save location for the graphs
@@ -66,7 +66,7 @@ pathGraphs = "./Graphs"
 # column chart of the most used words using the ggchart package
 tidyBooks %>% 
   count(word, sort = TRUE) %>% 
-  filter(n > 500) %>% 
+  filter(n > 464) %>% 
   mutate(word = reorder(word, n)) %>% 
   bar_chart(word, n) +
     labs(x = "Word",
@@ -75,11 +75,19 @@ tidyBooks %>%
     theme_nightblue(grid = "XY",
                     axis = "x",
                     ticks = "x") +
-    ggsave("MostUsedWordsinTheLordofTheRings.png",
+    ggsave("MostUsedWordsinTheLordofTheRings-gt464.png",
          plot = last_plot(),
          path = pathGraphs)
 
-
+# compare word frequency per book
+tidyBooks %>% 
+  count(word, sort = TRUE) %>% 
+  group_by(BookName) %>% 
+  mutate(proportion = n / sum(n)) %>% 
+  select(-n) %>% 
+  spread(book, proportion) %>% 
+  gather(book, proportion) %>% 
+  ungroup()
 
 
 
