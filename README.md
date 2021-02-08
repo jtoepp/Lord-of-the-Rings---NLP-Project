@@ -6,6 +6,8 @@ I have been a huge fan of Tolkien's works since I first read the Lord of the Rin
 ![A graph of the most used words in The Lords of The Rings Trilogy](Graphs/Top20LOTRWords.png)
 
 #### Part 2:  Word Frequency by Book
-![A graph of the most used words in each book of The Lord of the Rings Trilogy](Graphs/Top20WordsMultiplot.png)
+![A graph of the most used words in each book of The Fellowship of the Ring](Graphs/Top20FellowshipWords.png)
+![A graph of the most used words in each book of The Two Towers](Graphs/Top20TowersWords.png)
+![A graph of the most used words in each book of The Return of the King](Graphs/Top20KingWords.png)
 
 
