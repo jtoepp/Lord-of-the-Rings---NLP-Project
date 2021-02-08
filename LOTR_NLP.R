@@ -9,8 +9,7 @@ packages = c("jsonlite",
              "ggcharts",
              "tidytext",
              "naniar",
-             "ggplot2",
-             "Rmisc")
+             "ggplot2")
 
 # use this function to check if each package is on the local machine
 # if a package is installed, it will be loaded
@@ -173,8 +172,3 @@ KingWordFrequency <- WordFrequencyByBook %>%
 # ggsave("Top20KingWords.png",
 #      plot = last_plot(),
 #      path = pathGraphs)
-
-# plot all 3 histograms together
-multiplot(FellowshipWordFrequency_barchart,
-          TowersWordFrequency_barchart,
-          KingWordFrequency_barchart)
