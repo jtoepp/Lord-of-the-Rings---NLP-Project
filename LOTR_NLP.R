@@ -6,7 +6,9 @@ packages = c("jsonlite",
              "dplyr",
              "stringr",
              "tidyverse",
-             "ggcharts")
+             "ggcharts",
+             "tidytext",
+             "naniar")
 
 # use this function to check if each package is on the local machine
 # if a package is installed, it will be loaded
@@ -43,7 +45,7 @@ tidyBooks_stop <- dfBooks %>%
   unnest_tokens(word, ChapterData)
 
 # take a look
-head(tidyBooks)
+head(tidyBooks_stop)
 
 # count the most used words
 tidyBooks_stop %>% 
@@ -71,25 +73,30 @@ tidyBooks %>%
   bar_chart(word, n) +
     labs(x = "Word",
          y = "Frequency of Use",
-         title = "Most Used Words in The Lord of The Rings") +
+         title = "Top 20 Most Used Words in The Lord of The Rings Trilogy") +
+    geom_text(aes(label = n), 
+                hjust = -.1, 
+                vjust = +.4,
+                color = "white") +
     theme_nightblue(grid = "XY",
                     axis = "x",
-                    ticks = "x") +
-    ggsave("MostUsedWordsinTheLordofTheRings-gt464.png",
-         plot = last_plot(),
-         path = pathGraphs)
+                    ticks = "x")
+    # ggsave("Top20LOTRWords.png",
+    #      plot = last_plot(),
+    #      path = pathGraphs)
 
 # compare word frequency per book
-tidyBooks %>% 
+WordFrequencyPerBook <- tidyBooks %>% 
+  # group_by(BookName) %>% 
   count(word, sort = TRUE) %>% 
-  group_by(BookName) %>% 
   mutate(proportion = n / sum(n)) %>% 
-  select(-n) %>% 
-  spread(book, proportion) %>% 
-  gather(book, proportion) %>% 
-  ungroup()
+  # select(-n) %>% 
+  spread(BookName, proportion)
+  # gather(BookName, proportion) %>% 
+  # ungroup()
 
-
+WordFrequencyPerBook %>% 
+  mutate(word = reorder(word, n))
 
 
 
