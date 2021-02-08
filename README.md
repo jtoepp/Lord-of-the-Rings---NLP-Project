@@ -10,5 +10,10 @@ I have been a huge fan of Tolkien's works since I first read the Lord of the Rin
 ![A graph of the most used words in each book of The Two Towers](Graphs/Top20TowersWords.png)
 ![A graph of the most used words in each book of The Return of the King](Graphs/Top20KingWords.png)
 
+#### this is a test
+<img src="https://github.com/jtoepp/NLP-Project/blob/master/Graphs/Top20FellowshipWords_updated.png" alt="Your image title" width="250"/>
+<img src="https://github.com/jtoepp/NLP-Project/blob/master/Graphs/Top20TowersWords.png" alt="Your image title" width="250"/>
+<img src="https://github.com/jtoepp/NLP-Project/blob/master/Graphs/Top20KingWords.png" alt="Your image title" width="250"/>
+
  
  
