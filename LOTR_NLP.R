@@ -8,7 +8,9 @@ packages = c("jsonlite",
              "tidyverse",
              "ggcharts",
              "tidytext",
-             "naniar")
+             "naniar",
+             "ggplot2",
+             "Rmisc")
 
 # use this function to check if each package is on the local machine
 # if a package is installed, it will be loaded
@@ -85,18 +87,94 @@ tidyBooks %>%
     #      plot = last_plot(),
     #      path = pathGraphs)
 
-# compare word frequency per book
-WordFrequencyPerBook <- tidyBooks %>% 
-  # group_by(BookName) %>% 
-  count(word, sort = TRUE) %>% 
-  mutate(proportion = n / sum(n)) %>% 
-  # select(-n) %>% 
-  spread(BookName, proportion)
-  # gather(BookName, proportion) %>% 
-  # ungroup()
 
-WordFrequencyPerBook %>% 
-  mutate(word = reorder(word, n))
+# calculate word frequency by book
+WordFrequencyByBook <- tidyBooks %>% 
+  group_by(BookName, word) %>%
+  summarise(n = n())
+  # mutate(proportion = n / sum(n)) # percentage of usage
 
 
+# spread booknames from observations to columns
+WordFrequencyByBook %>% 
+  spread(BookName, n)
 
+
+
+# subset into individual books
+FellowshipWordFrequency <- WordFrequencyByBook %>% 
+  filter(BookName == "TheFellowshipOfTheRing")
+
+TowersWordFrequency <- WordFrequencyByBook %>% 
+  filter(BookName == "TheTwoTowers")
+
+KingWordFrequency <- WordFrequencyByBook %>% 
+  filter(BookName == "TheReturnOfTheKing")
+
+
+# column chart of the most used words using the ggchart package
+# FellowshipWordFrequency_barchart <- 
+  FellowshipWordFrequency %>% 
+    filter(n > 197) %>%
+    mutate(word = reorder(word, n)) %>%
+    bar_chart(word, n) +
+    labs(x = "Word",
+         y = "Frequency of Use",
+         title = "Top 20 Most Used Words in The Fellowship of the Ring") +
+    geom_text(aes(label = n), 
+              hjust = -.1, 
+              vjust = +.4,
+              color = "white") +
+    theme_nightblue(grid = "XY",
+                    axis = "x",
+                    ticks = "x")
+# ggsave("Top20FellowshipWords.png",
+#      plot = last_plot(),
+#      path = pathGraphs)
+
+
+# column chart of the most used words using the ggchart package
+# TowersWordFrequency_barchart <- 
+  TowersWordFrequency %>% 
+    filter(n > 168) %>%
+    mutate(word = reorder(word, n)) %>%
+    bar_chart(word, n) +
+    labs(x = "Word",
+         y = "Frequency of Use",
+         title = "Top 20 Most Used Words in The Two Towers") +
+    geom_text(aes(label = n), 
+              hjust = -.1, 
+              vjust = +.4,
+              color = "white") +
+    theme_nightblue(grid = "XY",
+                    axis = "x",
+                    ticks = "x")
+# ggsave("Top20TowersWords.png",
+#      plot = last_plot(),
+#      path = pathGraphs)
+
+
+# column chart of the most used words using the ggchart package
+# KingWordFrequency_barchart <- 
+  KingWordFrequency %>% 
+    filter(n > 150) %>%
+    mutate(word = reorder(word, n)) %>%
+    bar_chart(word, n) +
+    labs(x = "Word",
+         y = "Frequency of Use",
+         title = "Top 20 Most Used Words in The Return of the King") +
+    geom_text(aes(label = n), 
+              hjust = -.1, 
+              vjust = +.4,
+              color = "white") +
+    theme_nightblue(grid = "XY",
+                    axis = "x",
+                    ticks = "x")
+# ggsave("Top20KingWords.png",
+#      plot = last_plot(),
+#      path = pathGraphs)
+
+# plot all 3 histograms together
+multiplot(FellowshipWordFrequency_barchart,
+          TowersWordFrequency_barchart,
+          KingWordFrequency_barchart)
