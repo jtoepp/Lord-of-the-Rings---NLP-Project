@@ -9,8 +9,8 @@ I have been a huge fan of Tolkien's works since I first read the Lord of the Rin
 
 ### Part 2:  Word Frequency by Book
 ![A graph of the most used words in each book of The Fellowship of the Ring](Graphs/Top20FellowshipWords_updated.png)
-![A graph of the most used words in each book of The Two Towers](Graphs/Top20TowersWords.png)
-![A graph of the most used words in each book of The Return of the King](Graphs/Top20KingWords.png)
+![A graph of the most used words in each book of The Two Towers](Graphs/Top20TowersWords_updated.png)
+![A graph of the most used words in each book of The Return of the King](Graphs/Top20KingWords_updated.png)
 
 <!-- <img src="https://github.com/jtoepp/NLP-Project/blob/master/Graphs/Top20FellowshipWords_updated.png" alt="A graph of the most used words in each book of The Fellowship of the Ring" width="500"/>
 <img src="https://github.com/jtoepp/NLP-Project/blob/master/Graphs/Top20TowersWords.png" alt="A graph of the most used words in each book of The Two Towers" width="500"/>
