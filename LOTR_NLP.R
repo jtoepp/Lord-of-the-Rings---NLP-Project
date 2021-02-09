@@ -9,7 +9,8 @@ packages = c("jsonlite",
              "ggcharts",
              "tidytext",
              "naniar",
-             "ggplot2")
+             "ggplot2",
+             "tidyr")
 
 # use this function to check if each package is on the local machine
 # if a package is installed, it will be loaded
@@ -172,3 +173,127 @@ KingWordFrequency <- WordFrequencyByBook %>%
 # ggsave("Top20KingWords.png",
 #      plot = last_plot(),
 #      path = pathGraphs)
+  
+
+# sentiment analysis by book
+LOTR_sentiment <- tidyBooks %>% 
+  mutate(linenumber = row_number()) %>% 
+  inner_join(get_sentiments("bing")) %>% 
+  count(BookName, index = linenumber %/% 80, sentiment) %>% 
+  spread(sentiment, n, fill = 0) %>% 
+  mutate(sentiment = positive - negative) %>% 
+  select(-negative, -positive)
+  # arrange(factor(BookName, levels = c("TheFellowshipOfTheRing",
+  #                                     "TheTwoTowers",
+  #                                     "TheReturnOfTheKing")))
+
+
+# manual way of sorting the dataframe by book  
+Fellowship <- LOTR_sentiment %>% 
+  filter(BookName == "TheFellowshipOfTheRing")
+
+Towers <- LOTR_sentiment %>% 
+    filter(BookName == "TheTwoTowers")
+
+King <- LOTR_sentiment %>% 
+    filter(BookName == "TheReturnOfTheKing")
+
+LOTR_sentiment <- rbind(Fellowship, Towers, King)
+
+
+# confirm if arrange function worked as desired
+LOTR_sentiment %>% 
+  head()
+
+LOTR_sentiment %>% 
+  tail()
+
+
+# adapted from tidytextmining.com--joy sentiment analysis
+# license info for nrc lexicon dataset:
+# Name: NRC Word-Emotion Association Lexicon 
+# URL: http://saifmohammad.com/WebPages/lexicons.html 
+# License: License required for commercial use. Please contact Saif M. Mohammad (saif.mohammad@nrc-cnrc.gc.ca). 
+# Size: 22.8 MB (cleaned 424 KB) 
+# Download mechanism: http 
+# Citation info:
+#   
+#   This dataset was published in Saif M. Mohammad and Peter Turney. (2013), ``Crowdsourcing a Word-Emotion Association Lexicon.'' Computational Intelligence, 29(3): 436-465.
+# 
+# article{mohammad13,
+#   author = {Mohammad, Saif M. and Turney, Peter D.},
+#   title = {Crowdsourcing a Word-Emotion Association Lexicon},
+#   journal = {Computational Intelligence},
+#   volume = {29},
+#   number = {3},
+#   pages = {436-465},
+#   doi = {10.1111/j.1467-8640.2012.00460.x},
+#   url = {https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1467-8640.2012.00460.x},
+#   eprint = {https://onlinelibrary.wiley.com/doi/pdf/10.1111/j.1467-8640.2012.00460.x},
+#   year = {2013}
+# 
+
+nrc_joy <- get_sentiments("nrc") %>% 
+  filter(sentiment == "joy")
+
+tidyBooks %>%
+  filter(BookName == "TheFellowshipOfTheRing") %>%
+  inner_join(nrc_joy) %>%
+  count(word, sort = TRUE)
+
+tidyBooks %>%
+  filter(BookName == "TheTwoTowers") %>%
+  inner_join(nrc_joy) %>%
+  count(word, sort = TRUE)
+
+tidyBooks %>%
+  filter(BookName == "TheReturnOfTheKing") %>%
+  inner_join(nrc_joy) %>%
+  count(word, sort = TRUE)
+
+
+# column chart of the overall sentiment analysis of each book
+ggplot(Fellowship, aes(index, sentiment, fill = BookName)) +
+  geom_col(show.legend = FALSE) +
+  labs(x = "Word",
+       y = "Frequency of Use",
+       title = "The Fellowship of the Ring") +
+  theme_nightblue(grid = "XY",
+                  axis = "x",
+                  ticks = "x")
+
+ggplot(Towers, aes(index, sentiment, fill = BookName)) +
+  geom_col(show.legend = FALSE) +
+  labs(x = "Word",
+       y = "Frequency of Use",
+       title = "The Two Towers") +
+  theme_nightblue(grid = "XY",
+                  axis = "x",
+                  ticks = "x")
+
+ggplot(King, aes(index, sentiment, fill = BookName)) +
+  geom_col(show.legend = FALSE) +
+  labs(x = "Word",
+       y = "Frequency of Use",
+       title = "The Return of the King") +
+  theme_nightblue(grid = "XY",
+                  axis = "x",
+                  ticks = "x")
+
+
+
+
+# facet wrap of all books in the trilogy--ordered incorrectly
+# revisit to fix ordering:  https://stackoverflow.com/questions/5490638/how-to-change-the-order-of-facet-labels-in-ggplot-custom-facet-wrap-labels
+ggplot(LOTR_sentiment, aes(index, sentiment, fill = BookName)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~BookName, ncol = 3, scales = "free_x") +
+  labs(x = "Word",
+       y = "Frequency of Use",
+       title = "The Lord of the Rings") +
+  theme_nightblue(grid = "XY",
+                  axis = "x",
+                  ticks = "x")
+
+
+
