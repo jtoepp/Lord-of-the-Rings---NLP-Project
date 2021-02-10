@@ -253,6 +253,7 @@ tidyBooks %>%
 
 
 # column chart of the overall sentiment analysis of each book
+# Fellowship
 ggplot(Fellowship, aes(index, sentiment, fill = BookName)) +
   geom_col(show.legend = FALSE) +
   labs(x = "Word",
@@ -261,7 +262,11 @@ ggplot(Fellowship, aes(index, sentiment, fill = BookName)) +
   theme_nightblue(grid = "XY",
                   axis = "x",
                   ticks = "x")
+# ggsave("Fellowship_SentimentAnalysis.png",
+#      plot = last_plot(),
+#      path = pathGraphs)
 
+# Towers
 ggplot(Towers, aes(index, sentiment, fill = BookName)) +
   geom_col(show.legend = FALSE) +
   labs(x = "Word",
@@ -270,7 +275,11 @@ ggplot(Towers, aes(index, sentiment, fill = BookName)) +
   theme_nightblue(grid = "XY",
                   axis = "x",
                   ticks = "x")
+# ggsave("Towers_SentimentAnalysis.png",
+#        plot = last_plot(),
+#        path = pathGraphs)
 
+# King
 ggplot(King, aes(index, sentiment, fill = BookName)) +
   geom_col(show.legend = FALSE) +
   labs(x = "Word",
@@ -279,21 +288,36 @@ ggplot(King, aes(index, sentiment, fill = BookName)) +
   theme_nightblue(grid = "XY",
                   axis = "x",
                   ticks = "x")
+# ggsave("King_SentimentAnalysis.png",
+#        plot = last_plot(),
+#        path = pathGraphs)
 
 
+# replace books to help with ordering
+LOTR_sentiment_numbered <- LOTR_sentiment %>% 
+  mutate(
+    BookName = str_replace_all(
+      BookName, c(
+        "TheFellowshipOfTheRing" = "1_The Fellowship of the Ring"
+        , "TheTwoTowers" = "2_The Two Towers"
+        , "TheReturnOfTheKing" = "3_The Return of the King")
+      )
+    )
 
+head(LOTR_sentiment_numbered)
+tail(LOTR_sentiment_numbered)
 
 # facet wrap of all books in the trilogy--ordered incorrectly
-# revisit to fix ordering:  https://stackoverflow.com/questions/5490638/how-to-change-the-order-of-facet-labels-in-ggplot-custom-facet-wrap-labels
-ggplot(LOTR_sentiment, aes(index, sentiment, fill = BookName)) +
+ggplot(LOTR_sentiment_numbered, aes(index, sentiment, fill = BookName)) +
   geom_col(show.legend = FALSE) +
   facet_wrap(~BookName, ncol = 3, scales = "free_x") +
-  labs(x = "Word",
-       y = "Frequency of Use",
-       title = "The Lord of the Rings") +
+  labs(title = "Sentiment Analysis of The Lord of the Rings") +
   theme_nightblue(grid = "XY",
                   axis = "x",
                   ticks = "x")
+# ggsave("Trilogy_SentimentAnalysis.png",
+#        plot = last_plot(),
+#        path = pathGraphs)
 
 
-
+afinn <- 
